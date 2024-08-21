@@ -1,8 +1,11 @@
 project:
   type: website
+  output-dir: docs
 
 website:
   title: "OIID"
+  # favicon:
+  site-url: "https://simonebrazzi.github.io/OIID/"
   navbar:
     left:
       - href: index.qmd
@@ -12,8 +15,8 @@ website:
 format:
   html:
     theme:
-      dark: darkly
-      light: flatly
+      dark: [darkly, theme_dark_custom.scss]
+      light: [flatly, theme_light_custom.scss] 
     css: styles.css
     toc: true
 
