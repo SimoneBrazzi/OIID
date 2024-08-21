@@ -7,17 +7,26 @@ website:
   # favicon:
   site-url: "https://simonebrazzi.github.io/OIID/"
   navbar:
+    search: true
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - text: "Home"
+        href: index.qmd
+      - text: "Browse by topic" # hamburgher menu
+      - text: "Latest"
+      - text: "Resources" # drop down
+      - text: "About"
+        href: about.qmd
 
 format:
   html:
     theme:
       dark: [darkly, theme_dark_custom.scss]
       light: [flatly, theme_light_custom.scss] 
-    css: styles.css
+    code-link: TRUE
+    code-fold: show
+    code-line-numbers: TRUE
+    code-copy: TRUE
+    highlight-style: monokai
     toc: true
 
 editor: visual
