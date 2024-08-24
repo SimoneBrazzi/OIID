@@ -11,7 +11,10 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\nDraft!\n\n\n\n Back to top"
+    "text": "About this site\nDraft!\n\n\n\n Back to top",
+    "crumbs": [
+      "About"
+    ]
   },
   {
     "objectID": "topic/topic.html",
@@ -46,6 +49,30 @@
       "Topic",
       "Population and Demographic Change",
       "02 Age Structure"
+    ]
+  },
+  {
+    "objectID": "topics/Population and Demographic Change/02_age_structure.html",
+    "href": "topics/Population and Demographic Change/02_age_structure.html",
+    "title": "Age Structure",
+    "section": "",
+    "text": "Back to top",
+    "crumbs": [
+      "Topics",
+      "Population and Demographic Change",
+      "Age Structure"
+    ]
+  },
+  {
+    "objectID": "topics/Population and Demographic Change/01_population_growth.html",
+    "href": "topics/Population and Demographic Change/01_population_growth.html",
+    "title": "Population Growth",
+    "section": "",
+    "text": "List available resources. This will be in the backend to create the different datasets.\n\n\n\n\n\n\n\nTITOLO\nbla bla bla\nsiamo vecchi\nbla bla bla\nnon facciamo figli\nbla bla bla\neeeeeeeeh ai tempi miei signora mia\nbla bla bla\n\n\nTITOLO 2\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Topics",
+      "Population and Demographic Change",
+      "Population Growth"
     ]
   }
 ]

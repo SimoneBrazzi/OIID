@@ -1,4 +1,108 @@
 ---
 title: "Population Growth"
-
+sidebar: false
+engine: knitr
+echo: false
 ---
+
+```{r}
+#| echo: false
+#| warning: false
+#| error: false
+
+library("tidyverse", verbose = FALSE)
+library("ggplot2")
+library("rsdmx")
+library("owidR")
+library("reticulate")
+library("gt")
+library("scales", verbose = FALSE)
+library("janitor")
+library("shiny")
+library("plotly")
+library("ggiraph")
+```
+
+List available resources. This will be in the backend to create the different datasets.
+
+```{r}
+#| eval: false
+#| echo: false
+resources <- readSDMX(providerId = "ISTAT", resource = "dataflow") %>% 
+  as_tibble()
+```
+
+```{r}
+#| eval: false
+#| echo: false
+id <- resources %>% 
+  filter(Name.it %>% str_detect("Previsioni della popolazione")) %>% 
+  select(id, Name.it) %>%
+  pull(id)
+```
+
+```{r}
+#| eval: false
+#| echo: false
+tmp <- readSDMX(
+  providerId = "ISTAT",
+  resource = "data", 
+  flowRef  = id,
+  dsd = TRUE
+  ) %>% 
+  as.data.frame(labels = TRUE)
+saveSDMX(tmp, "~/R/OIID/topics/Population and Demographic Change/tmp.RData")
+```
+
+```{r}
+#| echo: false
+#| output: false
+df <- readSDMX("~/R/OIID/topics/Population and Demographic Change/tmp.RData", isRData = TRUE)
+```
+
+
+```{r}
+df <- df %>% 
+  mutate(obsTime = obsTime %>% str_c(., "-01-01") %>% as_date()) %>% 
+  janitor::clean_names()
+```
+
+```{r}
+df_t <- df %>% 
+  filter(
+    itter107 == "IT",
+    tipo_inddem == "JAN",
+    int_prev == "PROJMED", # median
+    eta == "TOTAL"
+  )
+```
+
+```{r}
+g <- ggplot(df_t, aes(x = obs_time, y = obs_value)) +
+  geom_line(aes(colour = sesso_label_it)) +
+  scale_x_date(date_labels = "%Y", date_breaks = "5 years") + 
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal()
+ggplotly(g)
+  # ggtitle("Previsioni della popolazione") +
+  # xlab("anni") +
+  # ylab("popolazione") %>% 
+```
+
+# TITOLO
+
+bla bla bla
+
+siamo vecchi
+
+bla bla bla
+
+non facciamo figli
+
+bla bla bla
+
+eeeeeeeeh ai tempi miei signora mia
+
+bla bla bla
+
+# TITOLO 2

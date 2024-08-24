@@ -3,34 +3,39 @@ project:
   output-dir: docs
 
 website:
-  cookie-consent:
-    type: express
-    style: interstitial
+
+  # basic metadata
   title: "Our Italy in Data"
   # favicon:
   site-url: "https://simonebrazzi.github.io/OIID/"
+  
+  # stuff
+  cookie-consent:
+    type: express
+    style: interstitial
   reader-mode: true
   back-to-top-navigation: true
+  bread-crumbs: false
+  
+  # navigation bar
   navbar:
     search: true
     left:
-      - sidebar:topic # hamburgher menu
-      # - sidebar:latest
-      # - sidebar:resources # drop down
+      - sidebar:browse_by_topic
       - text: "About"
         href: about.qmd
-  
+        
   sidebar:
-    - id: topic
+    - id: browse_by_topic
       title: "Browse by topic"
-      style: "floating"
-      contents: auto
-  
+      contents: topics
+      collapse-level: 4
+    
 format:
   html:
     theme:
-      dark: [darkly, theme_dark_custom.scss]
       light: [flatly, theme_light_custom.scss] 
+      dark: [darkly, theme_dark_custom.scss]
     code-link: TRUE
     code-fold: show
     code-line-numbers: TRUE
