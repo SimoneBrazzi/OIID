@@ -60,7 +60,6 @@ saveSDMX(tmp, "~/R/OIID/topics/Population and Demographic Change/tmp.RData")
 df <- readSDMX("~/R/OIID/topics/Population and Demographic Change/tmp.RData", isRData = TRUE)
 ```
 
-
 ```{r}
 df <- df %>% 
   mutate(obsTime = obsTime %>% str_c(., "-01-01") %>% as_date()) %>% 
