@@ -11,10 +11,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\nDraft!\n\n\n\n Back to top",
-    "crumbs": [
-      "About"
-    ]
+    "text": "About this site\nDraft!\n\n\n\n Back to top"
   },
   {
     "objectID": "topic/topic.html",
@@ -68,9 +65,8 @@
     "href": "topics/Population and Demographic Change/01_population_growth.html",
     "title": "Population Growth",
     "section": "",
-    "text": "List available resources. This will be in the backend to create the different datasets.\n\n\n\n\n\n\n\nTITOLO\nbla bla bla\nsiamo vecchi\nbla bla bla\nnon facciamo figli\nbla bla bla\neeeeeeeeh ai tempi miei signora mia\nbla bla bla\n\n\nTITOLO 2\n\n\n\n\n Back to top",
+    "text": "List available resources. This will be in the backend to create the different datasets.\n\nPer sesso - popolazione al 1 gennaioShiny\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTITOLO\nbla bla bla\nsiamo vecchi\nbla bla bla\nnon facciamo figli\nbla bla bla\neeeeeeeeh ai tempi miei signora mia\nbla bla bla\n\n\nTITOLO 2\n\n\n\n\n Back to top",
     "crumbs": [
-      "Topics",
       "Population and Demographic Change",
       "Population Growth"
     ]
@@ -85,6 +81,28 @@
       "Topics",
       "Health",
       "Health test"
+    ]
+  },
+  {
+    "objectID": "topics/index.html",
+    "href": "topics/index.html",
+    "title": "Browse by topic",
+    "section": "",
+    "text": "Back to top",
+    "crumbs": [
+      "Browse by topic"
+    ]
+  },
+  {
+    "objectID": "topics/Population and Demographic Change/index.qmd.html",
+    "href": "topics/Population and Demographic Change/index.qmd.html",
+    "title": "Population and Demographic Change",
+    "section": "",
+    "text": "Back to top",
+    "crumbs": [
+      "Browse by topic",
+      "Population and Demographic Change",
+      "Population and Demographic Change"
     ]
   }
 ]

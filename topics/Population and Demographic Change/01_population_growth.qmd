@@ -66,27 +66,36 @@ df <- df %>%
   janitor::clean_names()
 ```
 
+::: {.panel-tabset}
+
+## Per sesso - popolazione al 1 gennaio
 ```{r}
-df_t <- df %>% 
+df_sex <- df %>% 
   filter(
     itter107 == "IT",
     tipo_inddem == "JAN",
     int_prev == "PROJMED", # median
     eta == "TOTAL"
   )
-```
 
-```{r}
-g <- ggplot(df_t, aes(x = obs_time, y = obs_value)) +
+g <- ggplot(df_sex, aes(x = obs_time, y = obs_value)) +
   geom_line(aes(colour = sesso_label_it)) +
   scale_x_date(date_labels = "%Y", date_breaks = "5 years") + 
   scale_y_continuous(labels = scales::comma) +
-  theme_minimal()
+  theme_minimal() +
+  ggtitle("Previsioni della popolazione") +
+  xlab("anni") +
+  ylab("popolazione")
 ggplotly(g)
-  # ggtitle("Previsioni della popolazione") +
-  # xlab("anni") +
-  # ylab("popolazione") %>% 
 ```
+
+## Shiny
+```{=html}
+<iframe src="https://d4jtd9-simonebrazzi.shinyapps.io/Homicide_Eurostat/" width="100%" height="900" style="border: none;"></iframe>
+```
+
+
+:::
 
 # TITOLO
 

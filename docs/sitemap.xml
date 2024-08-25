@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://simonebrazzi.github.io/OIID/index.html</loc>
-    <lastmod>2024-08-25T07:26:35.574Z</lastmod>
+    <lastmod>2024-08-25T11:01:08.538Z</lastmod>
   </url>
   <url>
     <loc>https://simonebrazzi.github.io/OIID/about.html</loc>
@@ -26,10 +26,18 @@
   </url>
   <url>
     <loc>https://simonebrazzi.github.io/OIID/topics/Population and Demographic Change/01_population_growth.html</loc>
-    <lastmod>2024-08-24T20:42:59.342Z</lastmod>
+    <lastmod>2024-08-25T12:46:56.834Z</lastmod>
   </url>
   <url>
     <loc>https://simonebrazzi.github.io/OIID/topics/Health/01_heath_test.html</loc>
     <lastmod>2024-08-25T07:26:16.281Z</lastmod>
+  </url>
+  <url>
+    <loc>https://simonebrazzi.github.io/OIID/topics/Population and Demographic Change/index.qmd.html</loc>
+    <lastmod>2024-08-25T08:52:43.598Z</lastmod>
+  </url>
+  <url>
+    <loc>https://simonebrazzi.github.io/OIID/topics/index.html</loc>
+    <lastmod>2024-08-25T08:52:51.359Z</lastmod>
   </url>
 </urlset>
