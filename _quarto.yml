@@ -29,7 +29,6 @@ website:
     - id: browse_by_topic
       title: "Browse by topic"
       contents: topics
-      collapse-level: 4
     
 format:
   html:
