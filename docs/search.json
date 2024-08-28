@@ -55,7 +55,6 @@
     "section": "",
     "text": "List available resources. This will be in the backend to create the different datasets.\n\nTITOLO\nbla bla bla\nsiamo vecchi\nbla bla bla\nnon facciamo figli\nbla bla bla\neeeeeeeeh ai tempi miei signora mia\nbla bla bla\n\n\nTITOLO 2\n\n\n\n\n\n Back to top",
     "crumbs": [
-      "Topics",
       "Population and Demographic Change",
       "Age Structure"
     ]
@@ -76,7 +75,11 @@
     "href": "topics/Health/01_heath_test.html",
     "title": "Health test",
     "section": "",
-    "text": "Back to top"
+    "text": "Back to top",
+    "crumbs": [
+      "Health",
+      "Health test"
+    ]
   },
   {
     "objectID": "topics/index.html",
