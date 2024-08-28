@@ -4889,7 +4889,7 @@
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
     },
     ".Rprofile": {
-      "checksum": "be992ff58490161549928d0ba5415b1b"
+      "checksum": "634edb9f9e84f5313d3f43fb4e11876d"
     },
     "about.qmd": {
       "checksum": "b81eed72878e065c93bae14714ffd6b5"
@@ -4898,7 +4898,7 @@
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
     },
     "docs/about.html": {
-      "checksum": "4bbab05f9cc276765ab78d9c13732959"
+      "checksum": "a349a15483c06d7ce77c41dd5b79e243"
     },
     "docs/index.html": {
       "checksum": "d354ff29d54a7fe76b6c90bd13de0b5a"
@@ -4910,7 +4910,7 @@
       "checksum": "45af1459f17ab2bec4e8ce2a66d6fad2"
     },
     "docs/search.json": {
-      "checksum": "2296c63ef4fdf228e754763f4ed4ac32"
+      "checksum": "8364068f4f63a3f17e1237899d65cac1"
     },
     "docs/site_libs/bootstrap/bootstrap-dark.min.css": {
       "checksum": "b6ef957856e9dbd547726049bc3bc442"
@@ -5048,7 +5048,7 @@
       "checksum": "4db25a9ed5c5fcf2dd1746f27be2ef39"
     },
     "docs/sitemap.xml": {
-      "checksum": "d8ef3a0b6ce86b3b1e190ec37d201468"
+      "checksum": "80755a70e8ceafb57b8491c168e3ae9f"
     },
     "docs/styles.css": {
       "checksum": "e31c3cdea03dfab8a29456978017bd10"
@@ -5075,10 +5075,10 @@
       "checksum": "63340ca21a5414bcf326eb05bba8c1b4"
     },
     "docs/topics/Population and Demographic Change/01_population_growth.html": {
-      "checksum": "60ccc168eb4155a495e0c4827cd00f79"
+      "checksum": "4a708fd6835914b2533a99e0eec06145"
     },
     "docs/topics/Population and Demographic Change/02_age_structure.html": {
-      "checksum": "79b07a6f35d7cd2f151c97fd4c9a4118"
+      "checksum": "16b6994db46718e4bff17b1f0d6128f2"
     },
     "docs/topics/Population and Demographic Change/index.qmd.html": {
       "checksum": "c94cac1c7c0d31d3acccc90f67f1b2b8"
@@ -5104,8 +5104,14 @@
     "topics/Health/01_heath_test.qmd": {
       "checksum": "27d44da35489980ae8ee75000e7d7625"
     },
+    "topics/Population and Demographic Change/01_population_growth_files/figure-html/unnamed-chunk-5-1.png": {
+      "checksum": "b379b8def2378c8829821176964112f1"
+    },
+    "topics/Population and Demographic Change/01_population_growth_files/figure-html/unnamed-chunk-7-1.png": {
+      "checksum": "63340ca21a5414bcf326eb05bba8c1b4"
+    },
     "topics/Population and Demographic Change/01_population_growth.qmd": {
-      "checksum": "1b82864052a072d4d504e9ce3008007d"
+      "checksum": "9b622a7ffea094342a3a7bd49288d55f"
     },
     "topics/Population and Demographic Change/02_age_structure.qmd": {
       "checksum": "6ec20fa54bb4e8320fe785ce09ee9544"

@@ -66,9 +66,9 @@ df <- df %>%
   janitor::clean_names()
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Per sesso - popolazione al 1 gennaio
+
 ```{r}
 df_sex <- df %>% 
   filter(
@@ -90,11 +90,10 @@ ggplotly(g)
 ```
 
 ## Shiny
+
 ```{=html}
 <iframe src="https://d4jtd9-simonebrazzi.shinyapps.io/Homicide_Eurostat/" width="100%" height="900" style="border: none;"></iframe>
 ```
-
-
 :::
 
 # TITOLO
