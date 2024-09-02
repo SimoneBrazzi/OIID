@@ -19,6 +19,10 @@ website:
   
   # navigation bar
   navbar:
+    tools:
+      - icon: github
+        href: https://github.com/SimoneBrazzi/OIID
+      
     search: true
     left:
       - sidebar:browse_by_topic
