@@ -42,7 +42,8 @@ website:
           contents:
             - topics/Health/01_heath_test.qmd
         - section: TEST
-          contents: ~/R/OIID/topics/TEST/test.qmd
+          contents:
+            - ~/R/OIID/topics/TEST/test.qmd
 
 format:
   html:

@@ -8,6 +8,11 @@
       }
     ]
   },
+  "Python": {
+    "Version": "3.11.7",
+    "Type": "virtualenv",
+    "Name": "/Users/simonebrazzi/venv/oiid"
+  },
   "Packages": {
     "DBI": {
       "Package": "DBI",
