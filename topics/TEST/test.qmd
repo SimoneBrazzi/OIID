@@ -12,7 +12,6 @@ echo: false
 
 library("tidyverse", verbose = FALSE)
 library("ggplot2")
-library(istat)
 library("rsdmx")
 library("owidR")
 library("reticulate")
