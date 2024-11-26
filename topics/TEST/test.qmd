@@ -21,9 +21,6 @@ library(janitor)
 library(shiny)
 library(plotly)
 library(ggiraph)
-library(DBI)
-library(RSQLite)
-library(dbplyr)
 ```
 
 ```{r}
