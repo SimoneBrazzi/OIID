@@ -10,61 +10,51 @@ echo: false
 #| warning: false
 #| error: false
 
-library("tidyverse", verbose = FALSE)
-library("ggplot2")
-library("rsdmx")
-library("owidR")
-library("reticulate")
-library("gt")
-library("scales", verbose = FALSE)
-library("janitor")
-library("shiny")
-library("plotly")
-library("ggiraph")
+library(tidyverse, verbose = FALSE)
+library(ggplot2)
+library(rsdmx)
+library(owidR)
+library(reticulate)
+library(gt)
+library(scales, verbose = FALSE)
+library(janitor)
+library(shiny)
+library(plotly)
+library(ggiraph)
+library(DBI)
+library(RSQLite)
+library(dbplyr)
 ```
 
 ```{r}
-# functio to import data from istat
-read_db <- function(library, id, dsd, path, version, recent) {
+library(lubridate)
+
+read_db <- function(id, dsd, path, version, recent) {
   
-  # id {chr}
-  # dsd {bool}. TRUE returns metadata.
-  if (library == "rsdmx") {
-    tmp <- readSDMX(
-      providerId = "ISTAT",
-      resource = "data", 
-      flowRef = id,
-      dsd = dsd
+  rds_path <- str_c(path, id, ".rds")
+  
+  if (file.exists(rds_path)) {
+    # If the RDS file exists, read data from the file
+    df <- readRDS(rds_path)
+  } else {
+    # If the RDS file does not exist, read data using readSDMX and save to RDS
+    df <- readSDMX(
+        providerId = "ISTAT",
+        resource = "data", 
+        flowRef = id,
+        dsd = dsd
       ) %>% 
-      as.data.frame(labels = TRUE)
-    saveSDMX(tmp, str_c(path, id, ".RData"))
-    db <- readSDMX(str_c(path, id, ".RData"), isRData = TRUE)
-    df <- db %>% 
-      mutate(year = obsTime %>% str_c(., "-01-01") %>%
-               as_date()) %>%
-      janitor::clean_names() %>%
-      rename(value = obs_value) %>%
-      select(year, matches("_it"), value)
-    
-  } else if (library == "istat") {
-    
-    db <- get_istatdata(
-      agencyId = "IT1",
-      dataset_id = id,
-      version = version,
-      recent = recent
-      )
-    df <- db %>% 
-      mutate(year = obsTime %>% str_c(., "-01-01") %>%
-               as_date()) %>%
-      janitor::clean_names() %>%
-      rename(value = obs_value) %>%
-      select(year, matches("_it"), value)
-  }
+        as.data.frame(labels = TRUE)
+      
+      # Save data to RDS file
+      saveRDS(df, rds_path)
+      }
   
   return(df)
 }
+
 ```
+
 
 ```{r}
 #| eval: false
@@ -87,15 +77,22 @@ Total data for M and F.
 
 ```{r}
 # import suicide dataset
-suicide <- readSDMX(str_c("~/R/OIID/topics/TEST/datasets/", "39_1005", ".RData"), isRData = TRUE)
+suicide <- read_db(
+  id = "39_1005",
+  dsd = TRUE,
+  path = "~/R/OIID/topics/TEST/datasets/",
+  version = "1.0",
+  recent = FALSE
+  )
+```
+
+```{r}
 suicide <- suicide %>% 
-  mutate(obsTime = obsTime %>% str_c(., "-01-01") %>%
-               as_date()) %>%
+  mutate(year = ymd(str_c(obsTime, "-01-01"))) %>%
   janitor::clean_names() %>%
-  select(obs_time, matches("_it"), obs_value) %>% 
+  rename(value = obs_value) %>%
+  select(year, matches("_it"), value) %>% 
   rename(
-    year = obs_time,
-    value = obs_value,
     sesso = sesso_label_it
     )
 # plot suicide dataset 
@@ -113,6 +110,10 @@ suicide_total <- suicide %>%
       malattie_mentali_label_it == "tutte le voci" &
       mese_decesso_label_it == "anno"
   )
+```
+
+
+```{r}
 # plot
 line <- ggplot(suicide_total) +
   geom_line(aes(x = year, y = value, colour = sesso)) +
