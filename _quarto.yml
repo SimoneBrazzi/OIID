@@ -3,11 +3,8 @@ project:
   output-dir: docs
 
 website:
-
   # basic metadata
   title: "Our Italy in Data"
-  # favicon:
-  site-url: "https://simonebrazzi.github.io/OIID/"
   
   # stuff
   cookie-consent:
@@ -21,14 +18,12 @@ website:
   navbar:
     tools:
       - icon: github
-        href: https://github.com/SimoneBrazzi/OIID
-      
+        href: "https://github.com/SimoneBrazzi/OIID"
     search: true
     left:
-      - sidebar:browse_by_topic
       - text: "About"
         href: about.qmd
-        
+
   sidebar:
     - id: browse_by_topic
       title: "Browse by topic"
@@ -44,7 +39,10 @@ website:
         - section: Poverty and Economic Development
           contents:
             - topics/Poverty and Economic Development/01_economic_growth.qmd
-
+        - section: TEST
+          contents:
+            - topics/TEST/test.qmd
+  
 format:
   html:
     theme:
@@ -58,4 +56,3 @@ format:
     toc: true
 
 editor: visual
-
