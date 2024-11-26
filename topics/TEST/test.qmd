@@ -87,7 +87,7 @@ Total data for M and F.
 
 ```{r}
 # import suicide dataset
-suicide <- readSDMX(str_c("~/R/OIID/topics/TEST/", "39_1005", ".RData"), isRData = TRUE)
+suicide <- readSDMX(str_c("~/R/OIID/topics/TEST/datasets/", "39_1005", ".RData"), isRData = TRUE)
 suicide <- suicide %>% 
   mutate(obsTime = obsTime %>% str_c(., "-01-01") %>%
                as_date()) %>%
@@ -139,9 +139,9 @@ ggplotly(line)
 # download
 tmp <- read_db(
   library = "rsdmx",
-  id = "73_440",
+  id = "39_1005",
   dsd = TRUE,
-  path = "~/R/OIID/topics/TEST/",
+  path = "~/R/OIID/topics/TEST/datasets/",
   version = "1.0",
   recent = FALSE)
 ```
