@@ -12,6 +12,7 @@ echo: false
 
 library(tidyverse, verbose = FALSE)
 library(ggplot2)
+library(lubridate)
 library(rsdmx)
 library(owidR)
 library(reticulate)
@@ -24,7 +25,7 @@ library(ggiraph)
 ```
 
 ```{r}
-library(lubridate)
+
 
 read_db <- function(id, dsd, path, version, recent) {
   
