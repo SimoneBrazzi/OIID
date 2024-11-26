@@ -25,17 +25,18 @@ library(ggiraph)
 ```
 
 ```{r}
-
+library(readr)  # For reading and writing CSV files
+library(R.utils)  # For gzip compression
 
 read_db <- function(id, dsd, path, version, recent) {
   
-  rds_path <- str_c(path, id, ".rds")
+  csv_path <- str_c(path, id, ".csv.gz")
   
-  if (file.exists(rds_path)) {
-    # If the RDS file exists, read data from the file
-    df <- readRDS(rds_path)
+  if (file.exists(csv_path)) {
+    # If the compressed CSV file exists, read data from the file
+    df <- read_csv(csv_path)
   } else {
-    # If the RDS file does not exist, read data using readSDMX and save to RDS
+    # If the compressed CSV file does not exist, read data using readSDMX and save to compressed CSV
     df <- readSDMX(
         providerId = "ISTAT",
         resource = "data", 
@@ -44,13 +45,13 @@ read_db <- function(id, dsd, path, version, recent) {
       ) %>% 
         as.data.frame(labels = TRUE)
       
-      # Save data to RDS file
-      saveRDS(df, rds_path)
-      }
+      # Save data to CSV file and compress it
+      write_csv(df, str_c(path, id, ".csv"))
+      gzip(str_c(path, id, ".csv"), destname = csv_path, remove = TRUE)
+  }
   
   return(df)
 }
-
 ```
 
 
