@@ -41,9 +41,9 @@ website:
         - section: Health
           contents:
             - topics/Health/01_heath_test.qmd
-        - section: TEST
+        - section: Poverty and Economic Development
           contents:
-            - ~/R/OIID/topics/TEST/test.qmd
+            - topics/Poverty and Economic Development/01_economic_growth.qmd
 
 format:
   html:

@@ -1,0 +1,65 @@
+---
+title: "Economic Growth"
+author: "Pippo, Pluto e Paperino"
+sidebar: false
+engine: knitr
+echo: false
+filters:
+  - shinylive
+---
+
+```{r}
+#| warning: false
+#| error: false
+
+library("tidyverse", verbose = FALSE)
+library("lubridate")
+library("rsdmx")
+library("ggplot2")
+library("reticulate")
+library("gt")
+library("scales", verbose = FALSE)
+library("janitor")
+```
+
+
+```{r}
+#| echo: false
+#| output: false
+
+path <- "~/R/OIID/topics/datasets/tmp_163_156.rds"
+df <- readRDS(path)
+df <- df |> 
+  mutate(date = yq(obsTime) - day(1)) |> 
+  rename(
+    value = obsValue,
+    labels = VAL_label.it,
+    edi = EDI_label.it,
+    aggr = TIPO_AGGR_MILEURO_label.it,
+    adj = ADJUSTMENT_label.it
+  ) |> 
+  select(date, value, labels, edi, aggr, adj)
+```
+
+# Introduction
+
+Good health, nutrition, a place to live, education… Many of the things we care most about require goods and services produced by people: the care that nurses and doctors give; the food we eat; the homes we live in; the education that teachers provide.
+
+# Research & Writing
+
+Here research and writing.
+
+# Charts
+
+```{r}
+df |> 
+  filter(
+    
+  )
+```
+
+
+
+# Cite This Work
+
+# Use This Work

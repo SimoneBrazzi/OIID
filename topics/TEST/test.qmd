@@ -2,16 +2,17 @@
 title: "test"
 sidebar: false
 engine: knitr
-echo: true
+echo: false
 ---
 
 ```{r}
-
+#| output: false
 #| warning: false
 #| error: false
 
 library("tidyverse", verbose = FALSE)
 library("ggplot2")
+library(istat)
 library("rsdmx")
 library("owidR")
 library("reticulate")
@@ -23,35 +24,126 @@ library("plotly")
 library("ggiraph")
 ```
 
+```{r}
+read_db <- function(library, id, dsd, path, version, recent) {
+  
+  # id {chr}
+  # dsd {bool}. TRUE returns metadata.
+  if (library == "rsdmx") {
+    tmp <- readSDMX(
+      providerId = "ISTAT",
+      resource = "data", 
+      flowRef = id,
+      dsd = dsd
+      ) %>% 
+      as.data.frame(labels = TRUE)
+    saveSDMX(tmp, str_c(path, id, ".RData"))
+    db <- readSDMX(str_c(path, id, ".RData"), isRData = TRUE)
+    df <- db %>% 
+      mutate(year = obsTime %>% str_c(., "-01-01") %>%
+               as_date()) %>%
+      janitor::clean_names() %>%
+      rename(value = obs_value) %>%
+      select(year, matches("_it"), value)
+    
+  } else if (library == "istat") {
+    
+    db <- get_istatdata(
+      agencyId = "IT1",
+      dataset_id = id,
+      version = version,
+      recent = recent
+      )
+    df <- db %>% 
+      mutate(year = obsTime %>% str_c(., "-01-01") %>%
+               as_date()) %>%
+      janitor::clean_names() %>%
+      rename(value = obs_value) %>%
+      select(year, matches("_it"), value)
+  }
+  
+  return(df)
+}
+```
+
 List available resources. This will be in the backend to create the different datasets.
 
 ```{r}
 #| eval: false
-
 resources <- readSDMX(providerId = "ISTAT", resource = "dataflow") %>% 
   as_tibble()
 ```
 
+-   73_440 - Procedimenti e **reati** al momento della decisione del PM - adulti
+-   22_289 - **Popolazione** residente al 1° gennaio
+-   39_1005 - **Suicidi** - popolazione di 15 anni e oltre
+-   78_1112 - Donne che hanno subito violenza - caratteristiche demografiche e abitudini
+-   78_71 - Donne che hanno subito violenza dal partner o ex-partner
+-   78_72 - Donne che hanno subito violenza da un uomo
 ```{r}
 #| eval: false
+tmp <- read_db(
+  library = "rsdmx",
+  id = "73_440",
+  dsd = TRUE,
+  path = "~/R/OIID/topics/TEST/",
+  version = "1.0",
+  recent = FALSE)
+```
 
-tmp <- readSDMX(
-  providerId = "ISTAT",
-  resource = "data", 
-  flowRef  = "143_497",
-  dsd = TRUE
-  ) %>% 
-  as.data.frame(labels = TRUE)
-saveSDMX(tmp, "~/R/OIID/topics/Population and Demographic Change/143_497.RData")
+
+
+```{r}
+suicide <- readSDMX(str_c("~/R/OIID/topics/TEST/", "39_1005", ".RData"), isRData = TRUE)
+suicide <- suicide %>% 
+  mutate(obsTime = obsTime %>% str_c(., "-01-01") %>%
+               as_date()) %>%
+  janitor::clean_names() %>%
+  select(obs_time, matches("_it"), obs_value) %>% 
+  rename(
+    year = obs_time,
+    value = obs_value,
+    sesso = sesso_label_it
+    )
 ```
 
 ```{r}
-df <- readSDMX("~/R/OIID/topics/Population and Demographic Change/143_497.RData", isRData = TRUE)
+suicide_total <- suicide %>% 
+  filter(
+    mod_suicidio_label_it == "tutte le voci" &
+      eta_label_it == "totale" &
+      paese_cittad_label_it == "Italia" &
+      istruzione_label_it == "totale" &
+      terr_res_label_it == "Italia" & # Totale
+      tipo_dato_label_it == "morti" &
+      sesso != "totale" &
+      stato_civ_label_it == "totale" &
+      malattie_fisiche_label_it == "tutte le voci" &
+      malattie_mentali_label_it == "tutte le voci" &
+      mese_decesso_label_it == "anno"
+  )
+
+line <- ggplot(suicide_total) +
+  geom_line(aes(x = year, y = value, colour = sesso)) +
+  geom_point(aes(x = year, y = value, colour = sesso)) +
+  theme_classic() +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    title = "Time Series of Suicide",
+    subtitle = "By Year and Sex",
+    x = "Anni",
+    y = "Valore",
+    color = "Sesso"
+  ) +
+  scale_x_date(breaks = pretty_breaks(n = 10)) +
+  scale_y_continuous(breaks = pretty_breaks(n = 5))
+ggplotly(line)
 ```
 
-```{r}
-df %>% 
-  mutate(obsTime = obsTime %>% str_c(., "-01-01") %>% as_date()) %>% 
-  janitor::clean_names() %>% 
-  gt()
-```
+
+
+
+
+
+
+
