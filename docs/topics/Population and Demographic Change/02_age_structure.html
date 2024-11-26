@@ -96,35 +96,7 @@ cookieconsent.run({
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-<li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-browse-by-topic" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Browse by topic</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-browse-by-topic">
-<li class="dropdown-header">Population and Demographic Change</li>
-        <li>
-    <a class="dropdown-item" href="../../topics/Population and Demographic Change/01_population_growth.html">
- <span class="dropdown-text">Population Growth</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../topics/Population and Demographic Change/02_age_structure.html">
- <span class="dropdown-text">Age Structure</span></a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Health</li>
-        <li>
-    <a class="dropdown-item" href="../../topics/Health/01_heath_test.html">
- <span class="dropdown-text">Health test</span></a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Poverty and Economic Development</li>
-        <li>
-    <a class="dropdown-item" href="../../topics/Poverty and Economic Development/01_economic_growth.html">
- <span class="dropdown-text">Economic Growth</span></a>
-  </li>  
-    </ul>
-</li>
-  <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
@@ -416,7 +388,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/simonebrazzi\.github\.io\/OIID\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

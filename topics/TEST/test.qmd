@@ -3,13 +3,10 @@ title: "test"
 sidebar: false
 engine: knitr
 echo: false
+message: false
 ---
 
 ```{r}
-#| output: false
-#| warning: false
-#| error: false
-
 library(tidyverse, verbose = FALSE)
 library(ggplot2)
 library(lubridate)
@@ -22,12 +19,11 @@ library(janitor)
 library(shiny)
 library(plotly)
 library(ggiraph)
+library(readr)  # For reading and writing CSV files
+library(R.utils)  # For gzip compression
 ```
 
 ```{r}
-library(readr)  # For reading and writing CSV files
-library(R.utils)  # For gzip compression
-
 read_db <- function(id, dsd, path, version, recent) {
   
   csv_path <- str_c(path, id, ".csv.gz")
@@ -145,7 +141,6 @@ tmp <- read_db(
   version = "1.0",
   recent = FALSE)
 ```
-
 
 # Population
 

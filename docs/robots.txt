@@ -1,1 +1,0 @@
-Sitemap: https://simonebrazzi.github.io/OIID/sitemap.xml
