@@ -25,6 +25,7 @@ library("ggiraph")
 ```
 
 ```{r}
+# functio to import data from istat
 read_db <- function(library, id, dsd, path, version, recent) {
   
   # id {chr}
@@ -66,10 +67,10 @@ read_db <- function(library, id, dsd, path, version, recent) {
 }
 ```
 
-List available resources. This will be in the backend to create the different datasets.
-
 ```{r}
 #| eval: false
+
+# List available resources. This will be in the backend to create the different datasets.
 resources <- readSDMX(providerId = "ISTAT", resource = "dataflow") %>% 
   as_tibble()
 ```
@@ -80,20 +81,13 @@ resources <- readSDMX(providerId = "ISTAT", resource = "dataflow") %>%
 -   78_1112 - Donne che hanno subito violenza - caratteristiche demografiche e abitudini
 -   78_71 - Donne che hanno subito violenza dal partner o ex-partner
 -   78_72 - Donne che hanno subito violenza da un uomo
-```{r}
-#| eval: false
-tmp <- read_db(
-  library = "rsdmx",
-  id = "73_440",
-  dsd = TRUE,
-  path = "~/R/OIID/topics/TEST/",
-  version = "1.0",
-  recent = FALSE)
-```
 
+# Suicide time series
 
+Total data for M and F.
 
 ```{r}
+# import suicide dataset
 suicide <- readSDMX(str_c("~/R/OIID/topics/TEST/", "39_1005", ".RData"), isRData = TRUE)
 suicide <- suicide %>% 
   mutate(obsTime = obsTime %>% str_c(., "-01-01") %>%
@@ -105,9 +99,7 @@ suicide <- suicide %>%
     value = obs_value,
     sesso = sesso_label_it
     )
-```
-
-```{r}
+# plot suicide dataset 
 suicide_total <- suicide %>% 
   filter(
     mod_suicidio_label_it == "tutte le voci" &
@@ -122,7 +114,7 @@ suicide_total <- suicide %>%
       malattie_mentali_label_it == "tutte le voci" &
       mese_decesso_label_it == "anno"
   )
-
+# plot
 line <- ggplot(suicide_total) +
   geom_line(aes(x = year, y = value, colour = sesso)) +
   geom_point(aes(x = year, y = value, colour = sesso)) +
@@ -140,8 +132,27 @@ line <- ggplot(suicide_total) +
 ggplotly(line)
 ```
 
+# Felonies
+
+```{r}
+#| eval: false
+
+# download
+tmp <- read_db(
+  library = "rsdmx",
+  id = "73_440",
+  dsd = TRUE,
+  path = "~/R/OIID/topics/TEST/",
+  version = "1.0",
+  recent = FALSE)
+```
 
 
+# Population
+
+```{r}
+
+```
 
 
 

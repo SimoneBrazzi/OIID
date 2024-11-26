@@ -3,6 +3,7 @@ title: "Population Growth"
 sidebar: false
 engine: knitr
 echo: false
+eval: false
 ---
 
 ```{r}

@@ -108,7 +108,7 @@
     "href": "topics/TEST/test.html",
     "title": "test",
     "section": "",
-    "text": "List available resources. This will be in the backend to create the different datasets.\n\n73_440 - Procedimenti e reati al momento della decisione del PM - adulti\n22_289 - Popolazione residente al 1° gennaio\n39_1005 - Suicidi - popolazione di 15 anni e oltre\n78_1112 - Donne che hanno subito violenza - caratteristiche demografiche e abitudini\n78_71 - Donne che hanno subito violenza dal partner o ex-partner\n78_72 - Donne che hanno subito violenza da un uomo\n\n\n\n&lt;simpleError in as.character(text): cannot coerce type 'closure' to vector of type 'character'&gt;\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
+    "text": "73_440 - Procedimenti e reati al momento della decisione del PM - adulti\n22_289 - Popolazione residente al 1° gennaio\n39_1005 - Suicidi - popolazione di 15 anni e oltre\n78_1112 - Donne che hanno subito violenza - caratteristiche demografiche e abitudini\n78_71 - Donne che hanno subito violenza dal partner o ex-partner\n78_72 - Donne che hanno subito violenza da un uomo\n\nSuicide time series\nTotal data for M and F.\n\n\n&lt;simpleError in as.character(text): cannot coerce type 'closure' to vector of type 'character'&gt;\n\n\n\n\n\n\nFelonies\nPopulation\n\n\n Back to top"
   },
   {
     "objectID": "topics/Poverty and Economic Development/01_economic_growth.html",

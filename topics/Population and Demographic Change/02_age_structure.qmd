@@ -3,6 +3,7 @@ title: "Age Structure"
 sidebar: false
 engine: knitr
 echo: false
+eval: false
 ---
 
 ```{r}
@@ -57,6 +58,7 @@ saveSDMX(tmp, "~/R/OIID/topics/Population and Demographic Change/tmp.RData")
 ```{r}
 #| echo: false
 #| output: false
+#| eval: false
 df <- readSDMX("~/R/OIID/topics/Population and Demographic Change/tmp.RData", isRData = TRUE)
 ```
 
