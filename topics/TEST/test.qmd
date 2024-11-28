@@ -1,12 +1,17 @@
 ---
 title: "test"
 sidebar: false
-engine: knitr
-echo: false
-message: false
+execute:
+  eval: true
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+code-fold: true
 ---
 
 ```{r}
+source("~/R/OIID/topics/function.R")
 library(tidyverse, verbose = FALSE)
 library(ggplot2)
 library(lubridate)
@@ -24,7 +29,7 @@ library(R.utils)  # For gzip compression
 ```
 
 ```{r}
-read_db <- function(id, dsd, path, version, recent) {
+read_db <- function(id, dsd, path, version) {
   
   csv_path <- str_c(path, id, ".csv.gz")
   
@@ -59,13 +64,6 @@ resources <- readSDMX(providerId = "ISTAT", resource = "dataflow") %>%
   as_tibble()
 ```
 
--   73_440 - Procedimenti e **reati** al momento della decisione del PM - adulti
--   22_289 - **Popolazione** residente al 1° gennaio
--   39_1005 - **Suicidi** - popolazione di 15 anni e oltre
--   78_1112 - Donne che hanno subito violenza - caratteristiche demografiche e abitudini
--   78_71 - Donne che hanno subito violenza dal partner o ex-partner
--   78_72 - Donne che hanno subito violenza da un uomo
-
 # Suicide time series
 
 Total data for M and F.
@@ -76,12 +74,9 @@ suicide <- read_db(
   id = "39_1005",
   dsd = TRUE,
   path = "~/R/OIID/topics/TEST/datasets/",
-  version = "1.0",
-  recent = FALSE
+  version = "1.0"
   )
-```
 
-```{r}
 suicide <- suicide %>% 
   mutate(year = ymd(str_c(obsTime, "-01-01"))) %>%
   janitor::clean_names() %>%
@@ -105,12 +100,9 @@ suicide_total <- suicide %>%
       malattie_mentali_label_it == "tutte le voci" &
       mese_decesso_label_it == "anno"
   )
-```
 
-
-```{r}
 # plot
-line <- ggplot(suicide_total) +
+line_suicide <- ggplot(suicide_total) +
   geom_line(aes(x = year, y = value, colour = sesso)) +
   geom_point(aes(x = year, y = value, colour = sesso)) +
   theme_classic() +
@@ -123,30 +115,378 @@ line <- ggplot(suicide_total) +
     color = "Sesso"
   ) +
   scale_x_date(breaks = pretty_breaks(n = 10)) +
-  scale_y_continuous(breaks = pretty_breaks(n = 5))
-ggplotly(line)
+  scale_y_continuous(
+    breaks = pretty_breaks(n = 10),
+    labels = scales::number_format(big.mark = ",")
+    )
+ggplotly(line_suicide) %>% 
+  layout(hovermode="x unified")
 ```
 
 # Felonies
 
 ```{r}
-#| eval: false
-
-# download
-tmp <- read_db(
-  library = "rsdmx",
-  id = "39_1005",
+felonies_db <- read_db(
+  id = "73_58",
   dsd = TRUE,
   path = "~/R/OIID/topics/TEST/datasets/",
-  version = "1.0",
-  recent = FALSE)
+  version = "1.4"
+  )
+
+felonies <- felonies_db %>%
+  mutate(year = ymd(str_c(obsTime, "-01-01"))) %>%
+  janitor::clean_names() %>%
+  rename(value = obs_value) %>%
+  select(year, matches("_it"), value) %>% 
+  rename_with(~ str_remove(.x, "_label_it$")) %>% 
+  filter(
+    tipo_reato == "delitti contro l'incolumità individuale" |
+      tipo_reato %>% str_detect("omicidio") |
+      tipo_reato %>% str_detect("violenza sessuale") |
+      tipo_reato %>% str_detect("violenza privata")
+    ) %>% 
+  filter(
+    interv_reato_sent == "totale" &
+      eta_reato == "totale" &
+      eta_reatograve == "totale" &
+      distr_corteapp == "tutti i distretti" &
+      uff_giud == "tutte le voci" &
+      itter107 == "Italia" &
+      misure_sicur == "tutte le voci" &
+      natura_reato == "tutte le voci" &
+      precedenti == "tutte le voci" &
+      sesso != "totale" &
+      tipo_dato == "numero di condannati per delitto con sentenza irrevocabile" &
+      anno_reato == "tutte le voci"
+  )
 ```
+
+::: {.panel-tabset}
+
+## Total
+```{r}
+felonies_total <- felonies %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = felonies_total,
+  x = felonies_total$year,
+  y = felonies_total$value,
+  colour = felonies_total$sesso,
+  palette = "Dark2",
+  title = "Totale dei Reati",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## omicidio del consenziente consumato
+
+```{r}
+omicidio_consenziente_consumato <- felonies %>% 
+  filter(tipo_reato == "omicidio del consenziente consumato") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = omicidio_consenziente_consumato,
+  x = omicidio_consenziente_consumato$year,
+  y = omicidio_consenziente_consumato$value,
+  colour = omicidio_consenziente_consumato$sesso,
+  palette = "Dark2",
+  title = "Omicidio del consenziente consumato",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Omicidio Colposo
+
+```{r}
+omicidio_colposo <- felonies %>% 
+  filter(tipo_reato == "omicidio colposo") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = omicidio_colposo,
+  x = omicidio_colposo$year,
+  y = omicidio_colposo$value,
+  colour = omicidio_colposo$sesso,
+  palette = "Dark2",
+  title = "Omicidio del consenziente consumato",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Omicidio Volontario
+
+```{r}
+omicidio_volontario <- felonies %>% 
+  filter(tipo_reato == "omicidio volontario") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = omicidio_volontario,
+  x = omicidio_volontario$year,
+  y = omicidio_volontario$value,
+  colour = omicidio_volontario$sesso,
+  palette = "Dark2",
+  title = "Omicidio volontario",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Omicidio Volontario Consumato
+
+```{r}
+omicidio_volontario_consumato <- felonies %>% 
+  filter(tipo_reato == "omicidio volontario consumato") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = omicidio_volontario_consumato,
+  x = omicidio_volontario_consumato$year,
+  y = omicidio_volontario_consumato$value,
+  colour = omicidio_volontario_consumato$sesso,
+  palette = "Dark2",
+  title = "Omicidio volontario consumato",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Omicidio Volontario Tentato
+
+```{r}
+omicidio_volontario_tentato <- felonies %>% 
+  filter(tipo_reato == "omicidio volontario tentato") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = omicidio_volontario_tentato,
+  x = omicidio_volontario_tentato$year,
+  y = omicidio_volontario_tentato$value,
+  colour = omicidio_volontario_tentato$sesso,
+  palette = "Dark2",
+  title = "Omicidio volontario tentato",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Omicidio Preterintenzionale
+
+```{r}
+omicidio_volontario_preterintenzionale <- felonies %>% 
+  filter(tipo_reato == "omicidio volontario preterintenzionale") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = omicidio_volontario_preterintenzionale,
+  x = omicidio_volontario_preterintenzionale$year,
+  y = omicidio_volontario_preterintenzionale$value,
+  colour = omicidio_volontario_preterintenzionale$sesso,
+  palette = "Dark2",
+  title = "Omicidio volontario preterintenzionale",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Violenza Privata Tentata
+
+```{r}
+violenza_privata_tentata <- felonies %>% 
+  filter(tipo_reato == "violenza privata tentata") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = violenza_privata_tentata,
+  x = violenza_privata_tentata$year,
+  y = violenza_privata_tentata$value,
+  colour = violenza_privata_tentata$sesso,
+  palette = "Dark2",
+  title = "Violenza Privata Tentata",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Violenza Privata
+
+```{r}
+violenza_privata <- felonies %>% 
+  filter(tipo_reato == "violenza privata") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = violenza_privata,
+  x = violenza_privata$year,
+  y = violenza_privata$value,
+  colour = violenza_privata$sesso,
+  palette = "Dark2",
+  title = "Violenza Privata",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Violenza Sessuale di Gruppo
+
+```{r}
+violenza_sessuale_gruppo <- felonies %>% 
+  filter(tipo_reato == "violenza sessuale di gruppo") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = violenza_sessuale_gruppo,
+  x = violenza_sessuale_gruppo$year,
+  y = violenza_sessuale_gruppo$value,
+  colour = violenza_sessuale_gruppo$sesso,
+  palette = "Dark2",
+  title = "Violenza Sessuale di Gruppo",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+## Violenza Sessuale
+
+```{r}
+violenza_sessuale <- felonies %>% 
+  filter(tipo_reato == "violenza sessuale") %>% 
+  summarise(
+    value = sum(value),
+    .by = c(year, sesso)
+  )
+# plot
+plot_time_series(
+  t = violenza_sessuale,
+  x = violenza_sessuale$year,
+  y = violenza_sessuale$value,
+  colour = violenza_sessuale$sesso,
+  palette = "Dark2",
+  title = "Violenza Sessuale",
+  subtitle = "Serie storica per sesso",
+  xlabs = "Anni",
+  ylabs = "Valore",
+  legend_title = "Sesso"
+  )
+```
+
+:::
 
 # Population
 
 ```{r}
-
+population <- read_db(
+  id = "52_1194",
+  dsd = TRUE,
+  path = "~/R/OIID/topics/TEST/datasets/",
+  version = "1.5"
+  )
 ```
+
+```{r}
+population <- population %>% 
+  mutate(year = ymd(str_c(obsTime, "-01-01"))) %>%
+  janitor::clean_names() %>%
+  rename(value = obs_value) %>%
+  select(year, matches("_it"), value) %>% 
+  rename_with(~ str_remove(.x, "_label_it$"))
+```
+
+```{r}
+population_total <- population %>% 
+  filter(
+    itter107 == "Italia" &
+      sesso != "totale" &
+      cittadinanza == "totale" &
+      titolo_studio == "totale" &
+      (classe_eta == "15-64 anni" | classe_eta == "65 anni e più")
+  ) %>% 
+  summarise(
+    sum = sum(value) * 1000,
+    .by = c(year, sesso)
+  ) %>% 
+  filter(!is.na(year))
+
+line_population <- ggplot(population_total) +
+  geom_line(aes(x = year, y = sum, colour = sesso)) +
+  geom_point(aes(x = year, y = sum, colour = sesso, text = paste("Year: ", year, "<br>Sum: ", scales::comma(sum)))) +
+  theme_classic() +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    title = "Time Series of Suicide",
+    subtitle = "By Year and Sex",
+    x = "Anni",
+    y = "Valore",
+    color = "Sesso"
+  ) +
+  scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+  scale_y_continuous(
+    breaks = pretty_breaks(n = 10),
+    labels = scales::comma
+  )
+
+plot <- ggplotly(line_population, tooltip = c("text")) %>% 
+  layout(hovermode = "x unified")
+
+plot
+```
+
+
 
 
 
