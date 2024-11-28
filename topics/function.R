@@ -79,5 +79,54 @@ plot_time_series <- function(
 }
 
 
+#' Read and Save Data from SDMX
+#'
+#' This function reads data from the SDMX service provided by ISTAT and saves it as an RDS file for future use. 
+#' If the RDS file already exists, it loads the data from the file.
+#'
+#' @param id The ID of the data flow.
+#' @param dsd The data structure definition.
+#' @param path The path where the RDS file will be saved.
+#' @param version The version of the data (currently unused in the function).
+#'
+#' @return A data frame containing the data read from the SDMX service or the RDS file.
+#' @import readr
+#' @import stringr
+#' @import SDMX
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   df <- read_db("dataflow_id", "dsd_id", "path/to/save/", "version")
+#' }
+read_db <- function(id, dsd, path, version) {
+  
+  rds_path <- str_c(path, id, ".rds")
+  
+  if (file.exists(rds_path)) {
+    # If the RDS file exists, read data from the RDS file
+    df <- readRDS(rds_path)
+  } else {
+    # If the RDS file does not exist, read data using readSDMX and save to RDS
+    df <- readSDMX(
+      providerId = "ISTAT",
+      resource = "data", 
+      flowRef = id,
+      dsd = dsd
+    ) %>% 
+      as.data.frame(labels = TRUE) %>% 
+      mutate(year = ymd(str_c(obsTime, "-01-01"))) %>%
+      janitor::clean_names() %>%
+      rename(value = obs_value) %>%
+      select(year, matches("_it"), value) %>% 
+      rename_with(~ str_remove(.x, "_label_it$"))
+    
+    # Save data to RDS file
+    saveRDS(df, rds_path)
+  }
+  
+  return(df)
+}
+
 
 

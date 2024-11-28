@@ -1,0 +1,15 @@
+{
+  "hash": "22c32e19fded32f70ef61f12e9fc0a77",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Economic Growth\"\nauthor: \"Pippo, Pluto e Paperino\"\nsidebar: false\nengine: knitr\necho: false\neval: false\n---\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n\n\n\n# Introduction\n\nGood health, nutrition, a place to live, education… Many of the things we care most about require goods and services produced by people: the care that nurses and doctors give; the food we eat; the homes we live in; the education that teachers provide.\n\n# Research & Writing\n\nHere research and writing.\n\n# Charts\n\n\n\n\n::: {.cell}\n\n:::\n\n\n\n\n# Cite This Work\n\n# Use This Work\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

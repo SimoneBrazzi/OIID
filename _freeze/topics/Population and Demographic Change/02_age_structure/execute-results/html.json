@@ -1,0 +1,15 @@
+{
+  "hash": "d28f2626ab5972dd8112cba8833e1274",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Age Structure\"\nsidebar: false\nengine: knitr\necho: false\neval: false\n---\n\n::: {.cell}\n\n:::\n\n\n\n\nList available resources. This will be in the backend to create the different datasets.\n\n\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n\n\n\n# TITOLO\n\nbla bla bla\n\nsiamo vecchi\n\nbla bla bla\n\nnon facciamo figli\n\nbla bla bla\n\neeeeeeeeh ai tempi miei signora mia\n\nbla bla bla\n\n# TITOLO 2\n\n------------------------------------------------------------------------\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

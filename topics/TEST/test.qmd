@@ -1,6 +1,8 @@
 ---
 title: "test"
 sidebar: false
+execute:
+  eval: true
 ---
 
 ```{r}
@@ -17,35 +19,9 @@ library(janitor)
 library(shiny)
 library(plotly)
 library(ggiraph)
+library(fst)
 library(readr)  # For reading and writing CSV files
 library(R.utils)  # For gzip compression
-```
-
-```{r}
-read_db <- function(id, dsd, path, version) {
-  
-  csv_path <- str_c(path, id, ".csv.gz")
-  
-  if (file.exists(csv_path)) {
-    # If the compressed CSV file exists, read data from the file
-    df <- read_csv(csv_path)
-  } else {
-    # If the compressed CSV file does not exist, read data using readSDMX and save to compressed CSV
-    df <- readSDMX(
-        providerId = "ISTAT",
-        resource = "data", 
-        flowRef = id,
-        dsd = dsd
-      ) %>% 
-        as.data.frame(labels = TRUE)
-      
-      # Save data to CSV file and compress it
-      write_csv(df, str_c(path, id, ".csv"))
-      gzip(str_c(path, id, ".csv"), destname = csv_path, remove = TRUE)
-  }
-  
-  return(df)
-}
 ```
 
 ```{r}
@@ -56,7 +32,7 @@ resources <- readSDMX(providerId = "ISTAT", resource = "dataflow") %>%
   as_tibble()
 ```
 
-# Suicide time series
+# Suicidi
 
 Total data for M and F.
 
@@ -69,28 +45,20 @@ suicide <- read_db(
   version = "1.0"
   )
 
-suicide <- suicide %>% 
-  mutate(year = ymd(str_c(obsTime, "-01-01"))) %>%
-  janitor::clean_names() %>%
-  rename(value = obs_value) %>%
-  select(year, matches("_it"), value) %>% 
-  rename(
-    sesso = sesso_label_it
-    )
 # plot suicide dataset 
 suicide_total <- suicide %>% 
   filter(
-    mod_suicidio_label_it == "tutte le voci" &
-      eta_label_it == "totale" &
-      paese_cittad_label_it == "Italia" &
-      istruzione_label_it == "totale" &
-      terr_res_label_it == "Italia" & # Totale
-      tipo_dato_label_it == "morti" &
+    mod_suicidio == "tutte le voci" &
+      eta == "totale" &
+      paese_cittad == "Italia" &
+      istruzione == "totale" &
+      terr_res == "Italia" & # Totale
+      tipo_dato == "morti" &
       sesso != "totale" &
-      stato_civ_label_it == "totale" &
-      malattie_fisiche_label_it == "tutte le voci" &
-      malattie_mentali_label_it == "tutte le voci" &
-      mese_decesso_label_it == "anno"
+      stato_civ == "totale" &
+      malattie_fisiche == "tutte le voci" &
+      malattie_mentali == "tutte le voci" &
+      mese_decesso == "anno"
   )
 
 # plot
@@ -115,7 +83,7 @@ ggplotly(line_suicide) %>%
   layout(hovermode="x unified")
 ```
 
-# Felonies
+# Reati
 
 ```{r}
 felonies_db <- read_db(
@@ -126,11 +94,6 @@ felonies_db <- read_db(
   )
 
 felonies <- felonies_db %>%
-  mutate(year = ymd(str_c(obsTime, "-01-01"))) %>%
-  janitor::clean_names() %>%
-  rename(value = obs_value) %>%
-  select(year, matches("_it"), value) %>% 
-  rename_with(~ str_remove(.x, "_label_it$")) %>% 
   filter(
     tipo_reato == "delitti contro l'incolumità individuale" |
       tipo_reato %>% str_detect("omicidio") |
@@ -154,7 +117,8 @@ felonies <- felonies_db %>%
 ```
 
 ::: panel-tabset
-## Total
+
+## Totale
 
 ```{r}
 felonies_total <- felonies %>% 
@@ -177,7 +141,7 @@ plot_time_series(
   )
 ```
 
-## omicidio del consenziente consumato
+## Omicidio del Consenziente Consumato
 
 ```{r}
 omicidio_consenziente_consumato <- felonies %>% 
@@ -418,7 +382,7 @@ plot_time_series(
 ```
 :::
 
-# Population
+# Popolazione
 
 ```{r}
 population <- read_db(
@@ -427,15 +391,6 @@ population <- read_db(
   path = "~/R/OIID/topics/TEST/datasets/",
   version = "1.5"
   )
-```
-
-```{r}
-population <- population %>% 
-  mutate(year = ymd(str_c(obsTime, "-01-01"))) %>%
-  janitor::clean_names() %>%
-  rename(value = obs_value) %>%
-  select(year, matches("_it"), value) %>% 
-  rename_with(~ str_remove(.x, "_label_it$"))
 ```
 
 ```{r}

@@ -1,0 +1,15 @@
+{
+  "hash": "7fbe68312677d8347e10e23080b2b252",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Population Growth\"\nsidebar: false\nengine: knitr\necho: false\neval: false\n---\n\n::: {.cell}\n\n:::\n\n\n\n\nList available resources. This will be in the backend to create the different datasets.\n\n\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n\n\n\n::: panel-tabset\n## Per sesso - popolazione al 1 gennaio\n\n\n\n\n::: {.cell}\n\n:::\n\n\n\n\n## Shiny\n\n\n\n\n```{=html}\n<iframe src=\"https://d4jtd9-simonebrazzi.shinyapps.io/Homicide_Eurostat/\" width=\"100%\" height=\"900\" style=\"border: none;\"></iframe>\n```\n\n\n\n:::\n\n# TITOLO\n\nbla bla bla\n\nsiamo vecchi\n\nbla bla bla\n\nnon facciamo figli\n\nbla bla bla\n\neeeeeeeeh ai tempi miei signora mia\n\nbla bla bla\n\n# TITOLO 2\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
