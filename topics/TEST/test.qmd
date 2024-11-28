@@ -1,13 +1,6 @@
 ---
 title: "test"
 sidebar: false
-execute:
-  eval: false
-  freeze: auto
-  echo: true
-  message: false
-  warning: false
-code-fold: true
 ---
 
 ```{r}
@@ -54,7 +47,6 @@ read_db <- function(id, dsd, path, version) {
   return(df)
 }
 ```
-
 
 ```{r}
 #| eval: false
@@ -161,9 +153,9 @@ felonies <- felonies_db %>%
   )
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Total
+
 ```{r}
 felonies_total <- felonies %>% 
   summarise(
@@ -424,7 +416,6 @@ plot_time_series(
   legend_title = "Sesso"
   )
 ```
-
 :::
 
 # Population
@@ -485,10 +476,3 @@ plot <- ggplotly(line_population, tooltip = c("text")) %>%
 
 plot
 ```
-
-
-
-
-
-
-

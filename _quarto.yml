@@ -32,6 +32,14 @@ website:
       collapse-level: 2
       contents: topics
 
+# execute
+execute:
+  eval: false
+  freeze: auto
+  cache: true
+  echo: true
+  message: false
+  warning: false
 
 # format
 format:
@@ -40,7 +48,7 @@ format:
       light: [flatly, theme_light_custom.scss] 
       dark: [darkly, theme_dark_custom.scss]
     code-link: TRUE
-    code-fold: show
+    code-fold: true
     code-line-numbers: TRUE
     code-copy: TRUE
     highlight-style: monokai
