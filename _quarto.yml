@@ -19,6 +19,14 @@ website:
   navbar:
     background: primary
     search: true
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            href: https://github.com/SimoneBrazzi/OIID/tree/main
+          - text: Report a Bug
+            href: https://github.com/SimoneBrazzi/OIID/issues
+
     left:
       - text: "Home"
         href: index.qmd
@@ -34,7 +42,7 @@ website:
 
 # execute
 execute:
-  eval: false
+  eval: true
   freeze: auto
   cache: true
   echo: true
