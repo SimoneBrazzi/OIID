@@ -44,7 +44,7 @@ website:
 execute:
   eval: true
   freeze: auto
-  cache: true
+  cache: false
   echo: true
   message: false
   warning: false
