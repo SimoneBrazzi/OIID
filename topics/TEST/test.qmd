@@ -124,7 +124,7 @@ felonies <- felonies_db %>%
       misure_sicur == "tutte le voci" &
       natura_reato == "tutte le voci" &
       precedenti == "tutte le voci" &
-      sesso != "totale" &
+      # sesso != "totale" &
       tipo_dato == "numero di condannati per delitto con sentenza irrevocabile" &
       anno_reato == "tutte le voci"
   )
@@ -437,76 +437,21 @@ population <- read_db(
   path = "~/R/OIID/topics/TEST/datasets/",
   version = "1.5"
   )
-```
-
-```{r}
 population_total <- population %>% 
   filter(
-    itter107 == "Italia" &
-      sesso != "totale" &
-      cittadinanza == "totale" &
-      titolo_studio == "totale" &
-      (classe_eta == "15-64 anni" | classe_eta == "65 anni e più")
+    !is.na(year) &
+    freq == "annuale" & 
+    cittadinanza == "totale" &
+      itter107 == "Italia" &
+      classe_eta == "15-64 anni" &
+      titolo_studio == "totale"
   ) %>% 
-  summarise(
-    value = sum(value) * 1000,
-    .by = c(year, sesso)
-  ) %>% 
-  filter(!is.na(year))
-
-plot_time_series(
-  t = population_total,
-  x = population_total$year,
-  y = population_total$value,
-  x_text = "Anni",
-  y_text = "Numero",
-  colour = population_total$sesso,
-  palette = "Dark2",
-  title = "Violenza Sessuale di Gruppo",
-  subtitle = "Serie storica per sesso",
-  xlabs = "Anni",
-  ylabs = "Valore",
-  legend_title = "Sesso",
-  is_percentage = FALSE
-  )
+  select(year, sesso, value)
 ```
 
 # Totale in proporzione alla popolazione
 
 ```{r}
-#| eval: false
-omicidi_vs_popolazione <- felonies_total %>% 
-  left_join(
-    population_total,
-    by = c("year", "sesso"),
-    suffix = c("_omicidi", "_popolazione")
-    ) %>% 
-  filter(!is.na(value_popolazione)) %>% 
-  mutate(valore_pct = value_omicidi / value_popolazione)
-
-plot_time_series(
-  t = omicidi_vs_popolazione,
-  x = omicidi_vs_popolazione$year,
-  y = omicidi_vs_popolazione$value,
-  x_text = "Anni",
-  y_text = "Numero",
-  colour = omicidi_vs_popolazione$sesso,
-  palette = "Dark2",
-  title = "Percentuale di omicidi in rapporto alla popolazione",
-  subtitle = "Serie storica per sesso",
-  xlabs = "Anni",
-  ylabs = "Valore",
-  legend_title = "Sesso",
-  is_percentage = TRUE
-)
-```
-
-```{shinylive-r}
-#| standalone: true
-#| height: 1000
-#| width: 800
-
-# Assuming felonies_total and population_total data frames are available
 omicidi_vs_popolazione <- felonies_total %>% 
   left_join(
     population_total,
@@ -514,7 +459,56 @@ omicidi_vs_popolazione <- felonies_total %>%
     suffix = c("_omicidi", "_popolazione")
   ) %>% 
   filter(!is.na(value_popolazione)) %>% 
-  mutate(valore_pct = value_omicidi / value_popolazione) %>% 
+  mutate(pct = value_omicidi / value_popolazione) %>% 
+  rename(
+    omicidi = value_omicidi,
+    popolazione = value_popolazione
+    ) %>% 
+  select(year, sesso, pct, omicidi, popolazione) %>% 
+  pivot_longer(
+    cols = !c("year", "sesso"),
+    names_to = "variabile",
+    values_to = "valore"
+  )
+```
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 800
+
+source("~/R/OIID/topics/function.R")
+library(tidyverse, verbose = FALSE)
+library(ggplot2)
+library(lubridate)
+library(rsdmx)
+library(owidR)
+library(reticulate)
+library(gt)
+library(scales, verbose = FALSE)
+library(janitor)
+library(shiny)
+library(shinylive)
+library(thematic)
+library(waiter)
+library(plotly)
+library(ggiraph)
+library(fst)
+library(readr)  # For reading and writing CSV files
+library(R.utils)  # For gzip compression
+
+omicidi_vs_popolazione <- felonies_total %>% 
+  left_join(
+    population_total,
+    by = c("year", "sesso"),
+    suffix = c("_omicidi", "_popolazione")
+  ) %>% 
+  filter(!is.na(value_popolazione)) %>% 
+  mutate(pct = value_omicidi / value_popolazione) %>% 
+  rename(
+    omicidi = value_omicidi,
+    popolazione = value_popolazione
+    ) %>% 
+  select(year, sesso, pct, omicidi, popolazione) %>% 
   pivot_longer(
     cols = !c("year", "sesso"),
     names_to = "variabile",
@@ -522,11 +516,6 @@ omicidi_vs_popolazione <- felonies_total %>%
   )
 
 ui <- fluidPage(
-  useWaiter(), 
-  waiterShowOnLoad(html = spin_hexdots()),
-  
-  titlePanel("Interactive Time Series Plot"),
-  hr(),
   sidebarLayout(
     sidebarPanel(
       selectizeInput(
@@ -550,12 +539,7 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  
-  Sys.sleep(4) # simulate a delay
-  waiter_hide()
-  
-  thematic::thematic_shiny()
-  
+
   data <- reactive({
     omicidi_vs_popolazione %>% 
       filter(
@@ -594,6 +578,5 @@ server <- function(input, output) {
 
 shinyApp(ui = ui, server = server)
 ```
-
 
 

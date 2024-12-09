@@ -1,4 +1,23 @@
-# Assuming felonies_total and population_total data frames are available
+source("~/R/OIID/topics/function.R")
+library(tidyverse, verbose = FALSE)
+library(ggplot2)
+library(lubridate)
+library(rsdmx)
+library(owidR)
+library(reticulate)
+library(gt)
+library(scales, verbose = FALSE)
+library(janitor)
+library(shiny)
+library(shinylive)
+library(thematic)
+library(waiter)
+library(plotly)
+library(ggiraph)
+library(fst)
+library(readr)  # For reading and writing CSV files
+library(R.utils)  # For gzip compression
+
 omicidi_vs_popolazione <- felonies_total %>% 
   left_join(
     population_total,
@@ -6,7 +25,12 @@ omicidi_vs_popolazione <- felonies_total %>%
     suffix = c("_omicidi", "_popolazione")
   ) %>% 
   filter(!is.na(value_popolazione)) %>% 
-  mutate(valore_pct = value_omicidi / value_popolazione) %>% 
+  mutate(pct = value_omicidi / value_popolazione) %>% 
+  rename(
+    omicidi = value_omicidi,
+    popolazione = value_popolazione
+    ) %>% 
+  select(year, sesso, pct, omicidi, popolazione) %>% 
   pivot_longer(
     cols = !c("year", "sesso"),
     names_to = "variabile",
@@ -14,11 +38,6 @@ omicidi_vs_popolazione <- felonies_total %>%
   )
 
 ui <- fluidPage(
-  useWaiter(), 
-  waiterShowOnLoad(html = spin_hexdots()),
-  
-  titlePanel("Interactive Time Series Plot"),
-  hr(),
   sidebarLayout(
     sidebarPanel(
       selectizeInput(
@@ -42,12 +61,7 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  
-  Sys.sleep(4) # simulate a delay
-  waiter_hide()
-  
-  thematic::thematic_shiny()
-  
+
   data <- reactive({
     omicidi_vs_popolazione %>% 
       filter(
